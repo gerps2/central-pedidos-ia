@@ -1,7 +1,17 @@
 import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 
-const { Given, Then } = createBdd();
+const { Given, When, Then } = createBdd();
+
+When("aplico o cupom {string}", async ({ page }, code: string) => {
+  await page.getByLabel("Cupom").fill(code);
+  await page.getByRole("button", { name: "Aplicar cupom" }).click();
+  await page.waitForURL(/cupom=/);
+});
+
+Then("vejo o erro {string}", async ({ page }, text: string) => {
+  await expect(page.getByTestId("coupon-error")).toHaveText(text);
+});
 
 Given("que abri a lista de pedidos", async ({ page }) => {
   await page.goto("/");

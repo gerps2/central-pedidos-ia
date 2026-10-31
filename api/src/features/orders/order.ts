@@ -34,6 +34,18 @@ export function total(order: Pick<Order, "items">): number {
   return subtotal(order) - discount(order);
 }
 
+const COUPONS = new Map<string, number>([
+  ["FIAP10", 0.1],
+  ["BEMVINDO20", 0.2],
+]);
+
+/** Desconto com cupom: vale o maior entre o cupom e o progressivo, sem acumular. Devolve null se o cupom não existe. */
+export function discountWithCoupon(order: Pick<Order, "items">, code: string): number | null {
+  const rate = COUPONS.get(code);
+  if (rate === undefined) return null;
+  return Math.max(discount(order), subtotal(order) * rate);
+}
+
 /** Monta o pedido com os itens; o CPF nunca sai do banco. */
 export function toOrder(db: DatabaseSync, row: OrderRow): Order {
   const items = db
