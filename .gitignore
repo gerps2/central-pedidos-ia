@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.next/
+next-env.d.ts
+data/
+.env
+.env.local
+test-results/
+playwright-report/
+.features-gen/
+*.log
+*.tsbuildinfo
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/worktrees/
+.claude/evals/results/

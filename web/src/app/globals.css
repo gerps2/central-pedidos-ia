@@ -1,0 +1,7 @@
+body { margin: 0; font-family: system-ui, sans-serif; background: #f5f6f8; color: #1b2230; }
+header { background: #0a1530; padding: 16px 32px; }
+header a { color: #fff; font-weight: 600; text-decoration: none; }
+main { max-width: 860px; margin: 32px auto; padding: 0 16px; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { padding: 12px; border-bottom: 1px solid #e3e6eb; text-align: left; }
+.alert { background: #fff1f4; border-left: 4px solid #d30f59; padding: 12px; margin: 16px 0; }
