@@ -27,4 +27,11 @@ describe("regras do pedido", () => {
   it("cupom desconhecido devolve null", () => {
     expect(discountWithCoupon(order(400), "PROMO50")).toBeNull();
   });
+
+  it.each(["toString", "constructor", "__proto__", "hasOwnProperty", "valueOf"])(
+    "nome herdado do Object (%s) não é cupom",
+    (code) => {
+      expect(discountWithCoupon(order(400), code)).toBeNull();
+    },
+  );
 });

@@ -31,3 +31,5 @@ Monorepo com API em NestJS (vertical slice), tela em Next.js e SQLite local. Rod
 ## Aprendizados
 
 Cada erro repetido do agente vira uma linha aqui ou uma regra em `.claude/rules/`.
+
+- Tabela de busca por texto vindo do usuário (cupons, códigos) usa `Map`, não objeto comum: `obj["toString"]` devolve função herdada. Teste com `toString` e `constructor`.
