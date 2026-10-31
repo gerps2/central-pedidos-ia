@@ -9,14 +9,18 @@ export type ListOrdersResponse = {
   total: number;
 }[];
 
+function isOrderStatus(value?: string): value is OrderStatus {
+  return value === "PAID" || value === "SHIPPED";
+}
+
 @Injectable()
 export class ListOrdersHandler {
   constructor(private readonly database: Database) {}
 
-  /** Lista os pedidos, do mais novo para o mais antigo. */
-  handle(status?: OrderStatus): ListOrdersResponse {
+  /** Lista os pedidos, do mais novo para o mais antigo. Status desconhecido mostra todos. */
+  handle(status?: string): ListOrdersResponse {
     const db = this.database.connection;
-    const rows = status
+    const rows = isOrderStatus(status)
       ? db.prepare(`SELECT ${ORDER_COLUMNS} FROM orders WHERE status = ? ORDER BY id DESC`).all(status)
       : db.prepare(`SELECT ${ORDER_COLUMNS} FROM orders ORDER BY id DESC`).all();
     return (rows as OrderRow[]).map((row) => {
@@ -31,7 +35,7 @@ export class ListOrdersController {
   constructor(private readonly handler: ListOrdersHandler) {}
 
   @Get()
-  list(@Query("status") status?: OrderStatus): ListOrdersResponse {
+  list(@Query("status") status?: string): ListOrdersResponse {
     return this.handler.handle(status);
   }
 }

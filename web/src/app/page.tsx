@@ -6,11 +6,25 @@ export const dynamic = "force-dynamic";
 
 type OrderRow = { id: string; customerName: string; status: string; total: number };
 
-export default async function HomePage() {
-  const orders = (await api<OrderRow[]>("/orders")) ?? [];
+const FILTERS = [
+  { label: "Todos", status: "" },
+  { label: "Pago", status: "PAID" },
+  { label: "Enviado", status: "SHIPPED" },
+];
+
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status = "" } = await searchParams;
+  const orders = (await api<OrderRow[]>(`/orders?status=${encodeURIComponent(status)}`)) ?? [];
   return (
     <>
       <h1>Pedidos</h1>
+      <nav aria-label="Filtrar por status">
+        {FILTERS.map((filter) => (
+          <Link key={filter.label} href={filter.status ? `/?status=${filter.status}` : "/"}>
+            {filter.label}
+          </Link>
+        ))}
+      </nav>
       <table>
         <thead>
           <tr>
