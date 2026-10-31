@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "central-pedidos": {
+      "type": "http",
+      "url": "http://localhost:3200/mcp"
+    }
+  }
+}
