@@ -6,11 +6,32 @@ export const dynamic = "force-dynamic";
 
 type OrderRow = { id: string; customerName: string; status: string; total: number };
 
-export default async function HomePage() {
-  const orders = (await api<OrderRow[]>("/orders")) ?? [];
+const FILTERS = [
+  { label: "Todos", status: undefined },
+  { label: "Pago", status: "PAID" },
+  { label: "Enviado", status: "SHIPPED" },
+] as const;
+
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status } = await searchParams;
+  const active = FILTERS.find((filter) => filter.status === status) ?? FILTERS[0];
+  const query = active.status ? `?status=${active.status}` : "";
+  const orders = (await api<OrderRow[]>(`/orders${query}`)) ?? [];
   return (
     <>
       <h1>Pedidos</h1>
+      <nav aria-label="Filtrar por status">
+        {FILTERS.map((filter) => (
+          <Link
+            key={filter.label}
+            href={filter.status ? `/?status=${filter.status}` : "/"}
+            aria-current={filter === active ? "page" : undefined}
+            style={{ marginRight: 12, fontWeight: filter === active ? "bold" : "normal" }}
+          >
+            {filter.label}
+          </Link>
+        ))}
+      </nav>
       <table>
         <thead>
           <tr>
