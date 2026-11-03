@@ -9,7 +9,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR">
       <body>
         <header>
-          <Link href="/">Central de pedidos</Link>
+          <nav>
+            <span className="logo">CP</span>
+            <Link href="/">Central de pedidos</Link>
+            <small>Painel de atendimento</small>
+          </nav>
         </header>
         <main>{children}</main>
       </body>
