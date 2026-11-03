@@ -1,0 +1,54 @@
+# Central de pedidos: chamadas para mostrar a API funcionando.
+# Abra no VS Code com a extensão REST Client (humao.rest-client)
+# e clique em "Send Request" acima de cada chamada.
+# Antes, suba o projeto com: npm run dev
+
+@api = http://localhost:3200
+
+### 1. Lista todos os pedidos, do mais novo para o mais antigo
+GET {{api}}/orders
+
+### 2. Só os pedidos pagos (a API já filtra; a feature da live é na tela)
+GET {{api}}/orders?status=PAID
+
+### 3. Só os pedidos enviados
+GET {{api}}/orders?status=SHIPPED
+
+### 4. Detalhe do pedido 1042: subtotal 400, desconto 40, total 360 e item sem estoque
+GET {{api}}/orders/1042
+
+### 5. Pedido que não existe: a API responde 404
+GET {{api}}/orders/9999
+
+### 6. Estoque de um produto, sem diferenciar maiúsculas e minúsculas
+GET {{api}}/stock/teclado%20mecanico
+
+### 7. Produto que não existe: 404
+GET {{api}}/stock/cadeira
+
+
+# ---------------------------------------------------------------
+# Parte 3 da live: o servidor MCP dentro da mesma API.
+# O Claude Code faz estas chamadas por você; aqui elas ficam visíveis.
+# ---------------------------------------------------------------
+
+### 8. MCP: quais ferramentas o servidor expõe
+POST {{api}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
+
+### 9. MCP: get_order devolve o pedido com o e-mail mascarado e sem CPF
+POST {{api}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "get_order", "arguments": {"id": "1042"}}}
+
+### 10. MCP: check_stock mostra a data de reposição do teclado
+POST {{api}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "check_stock", "arguments": {"product": "Teclado Mecanico"}}}

@@ -7,3 +7,8 @@ export function money(value: number): string {
 export function statusLabel(status: string): string {
   return status === "SHIPPED" ? "Enviado" : "Pago";
 }
+
+/** Classe visual do status, usada no selo da tela. */
+export function statusClass(status: string): string {
+  return status === "SHIPPED" ? "badge shipped" : "badge paid";
+}
