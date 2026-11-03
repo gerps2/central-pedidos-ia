@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 
-const { Given, Then } = createBdd();
+const { Given, When, Then } = createBdd();
 
 Given("que abri a lista de pedidos", async ({ page }) => {
   await page.goto("/");
@@ -9,6 +9,14 @@ Given("que abri a lista de pedidos", async ({ page }) => {
 
 Given("que abri o pedido {string}", async ({ page }, id: string) => {
   await page.goto(`/pedidos/${id}`);
+});
+
+When("filtro por {string}", async ({ page }, label: string) => {
+  await page.getByRole("navigation", { name: "Filtrar por status" }).getByRole("link", { name: label }).click();
+});
+
+Then("não vejo o pedido {string}", async ({ page }, id: string) => {
+  await expect(page.getByRole("link", { name: id })).toHaveCount(0);
 });
 
 Then("vejo o pedido {string}", async ({ page }, id: string) => {
